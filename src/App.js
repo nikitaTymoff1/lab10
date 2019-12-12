@@ -82,28 +82,28 @@ class App extends React.Component {
 
         if (inputs.date === '' || inputs.name === '') return;
 
-        let boo = false;
-        let date = new Date().toLocaleString();
-        let withoutTime = date.slice(0,date.indexOf(','));
-        let dateArr = withoutTime.split('.');
 
-        let day = parseInt(dateArr[0]) + 1;
-        let month = parseInt(dateArr[1]);
-        let year = parseInt(dateArr[2]);
+        let today = new Date();
 
-        if (day + parseInt(inputs.date) > 31) {
-            month = '01';
-            day = day + parseInt(inputs.date) - 31;
-            boo = true;
-        }
+        let day = String(today.getDate()).padStart(2, '0');
+        let month = String(today.getMonth() + 1).padStart(2, '0');
+        let year = today.getFullYear();
 
-        let str = `${boo ? day : day + parseInt(inputs.date)}-${month}-${year}`;
+        today = day + '-' + month + '-' + year;
+
+        let newDate = new Date(today);
+
+        newDate.setDate(newDate.getDate() + parseInt(inputs.date));
+
+        let almostFinalDate = newDate.toLocaleString();
+        let finalDate = almostFinalDate.slice(0,almostFinalDate.indexOf(','));
+
 
         todos.push({
             id: nextId,
             text: inputs.name,
             createdAt: `13-12-2019`,
-            willEndAt: str
+            willEndAt: finalDate
         });
         this.setState({todos: todos});
     };
